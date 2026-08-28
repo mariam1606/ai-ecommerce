@@ -1,0 +1,213 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }} | AI Shop{% endblock %}
+
+{% block content %}
+
+<div class="product-detail-container">
+
+    <div class="product-detail-image">
+
+        {% if product.image %}
+
+            <img
+                src="{{ product.image.url }}"
+                alt="{{ product.name }}"
+            >
+
+        {% else %}
+
+            <div class="detail-no-image">
+                No Image Available
+            </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <div class="product-detail-info">
+
+        {% if product.category %}
+
+        <span class="section-label">
+            {{ product.category.name }}
+        </span>
+
+        {% endif %}
+
+        <h1>
+            {{ product.name }}
+        </h1>
+
+        <div class="detail-price">
+            ${{ product.price }}
+        </div>
+
+        <div class="detail-divider"></div>
+
+        {% if product.description %}
+
+        <p class="detail-description">
+            {{ product.description }}
+        </p>
+
+        {% else %}
+
+        <p class="detail-description">
+            Discover this product and add it to your collection.
+        </p>
+
+        {% endif %}
+
+
+        {% if product.stock > 0 %}
+
+        <div class="stock-status">
+            ✓ In Stock
+            <span>
+                {{ product.stock }} available
+            </span>
+        </div>
+
+        {% else %}
+
+        <div class="stock-status out">
+            ✕ Out of Stock
+        </div>
+
+        {% endif %}
+
+
+        {% if user.is_authenticated and product.stock > 0 %}
+
+        <a
+            href="{% url 'add_to_cart' product.id %}"
+            class="detail-cart-button"
+        >
+            ADD TO CART
+        </a>
+
+        {% elif not user.is_authenticated %}
+
+        <a
+            href="{% url 'login' %}"
+            class="detail-cart-button"
+        >
+            LOGIN TO PURCHASE
+        </a>
+
+        {% endif %}
+
+
+        <div class="product-benefits">
+
+            <div>
+                <strong>Free Delivery</strong>
+                <span>Fast and reliable shipping</span>
+            </div>
+
+            <div>
+                <strong>Secure Shopping</strong>
+                <span>Your information is protected</span>
+            </div>
+
+            <div>
+                <strong>AI Recommendations</strong>
+                <span>Discover similar products</span>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+{% if similar_products %}
+
+<section class="products-section related-section">
+
+    <div class="section-header">
+
+        <div>
+
+            <span class="section-label">
+                YOU MAY ALSO LIKE
+            </span>
+
+            <h2>
+                Similar Products
+            </h2>
+
+        </div>
+
+    </div>
+
+
+    <div class="products-grid">
+
+        {% for item in similar_products %}
+
+        <article class="product-card">
+
+            <a
+                href="{% url 'product_detail' item.product.id %}"
+                class="product-image-wrapper"
+            >
+
+                {% if item.product.image %}
+
+                <img
+                    src="{{ item.product.image.url }}"
+                    alt="{{ item.product.name }}"
+                >
+
+                {% endif %}
+
+            </a>
+
+            <div class="product-info">
+
+                <span class="product-category">
+                    {{ item.product.category.name }}
+                </span>
+
+                <h3>
+                    <a href="{% url 'product_detail' item.product.id %}">
+                        {{ item.product.name }}
+                    </a>
+                </h3>
+
+                <div class="product-bottom">
+
+                    <strong>
+                        ${{ item.product.price }}
+                    </strong>
+
+                    {% if user.is_authenticated and item.product.stock > 0 %}
+
+                    <a
+                        href="{% url 'add_to_cart' item.product.id %}"
+                        class="add-button"
+                    >
+                        +
+                    </a>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </article>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+{% endif %}
+
+{% endblock %}

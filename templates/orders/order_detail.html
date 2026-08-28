@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Order #{{ order.id }} | AI E-Commerce{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <h1 class="page-title">
+        Order #{{ order.id }}
+    </h1>
+
+    <div class="cart-table">
+
+        <table style="width: 100%;">
+
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for item in order.items.all %}
+
+                <tr>
+
+                    <td>
+                        {{ item.product.name }}
+                    </td>
+
+                    <td>
+                        ${{ item.price }}
+                    </td>
+
+                    <td>
+                        {{ item.quantity }}
+                    </td>
+
+                    <td>
+                        ${{ item.total_price }}
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <div class="total-box">
+
+        <p>
+            Status:
+            <strong>{{ order.status }}</strong>
+        </p>
+
+        <h2>
+            Total: ${{ order.total_price }}
+        </h2>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,263 @@
+{% extends "base.html" %}
+
+{% block title %}Home | AI Shop{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <div class="hero-text">
+
+            <span class="hero-small-title">
+                AI POWERED SHOPPING
+            </span>
+
+            <h1>
+                Discover Your
+                <span>Perfect Style</span>
+            </h1>
+
+            <p>
+                Explore our latest collection and discover
+                products selected especially for you.
+            </p>
+
+            <a href="{% url 'product_list' %}" class="hero-button">
+                START SHOPPING
+            </a>
+
+        </div>
+
+        <div class="hero-image">
+
+            {% if recommendations and recommendations.0.product.image %}
+
+                <img
+                    src="{{ recommendations.0.product.image.url }}"
+                    alt="{{ recommendations.0.product.name }}"
+                >
+
+            {% else %}
+
+                <div class="hero-placeholder">
+                    AI SHOP
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="features">
+
+    <div class="feature">
+
+        <div class="feature-icon">
+            ♡
+        </div>
+
+        <div>
+            <h3>Smart Recommendations</h3>
+            <p>
+                AI-powered products selected for your interests.
+            </p>
+        </div>
+
+    </div>
+
+
+    <div class="feature">
+
+        <div class="feature-icon">
+            ★
+        </div>
+
+        <div>
+            <h3>Happy Customers</h3>
+            <p>
+                Discover products loved by our customers.
+            </p>
+        </div>
+
+    </div>
+
+
+    <div class="feature">
+
+        <div class="feature-icon">
+            🛒
+        </div>
+
+        <div>
+            <h3>Easy Shopping</h3>
+            <p>
+                Simple shopping experience from cart to checkout.
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+
+{% if recommendations %}
+
+<section class="products-section">
+
+    <div class="section-header">
+
+        <div>
+            <span class="section-label">
+                OUR COLLECTION
+            </span>
+
+            <h2>
+                Featured Products
+            </h2>
+        </div>
+
+        <a href="{% url 'product_list' %}" class="view-all">
+            VIEW ALL →
+        </a>
+
+    </div>
+
+
+    <div class="products-grid">
+
+        {% for item in recommendations|slice:":8" %}
+
+        <article class="product-card">
+
+            <a
+                href="{% url 'product_detail' item.product.id %}"
+                class="product-image-wrapper"
+            >
+
+                {% if item.product.image %}
+
+                    <img
+                        src="{{ item.product.image.url }}"
+                        alt="{{ item.product.name }}"
+                    >
+
+                {% else %}
+
+                    <div class="no-image">
+                        No Image
+                    </div>
+
+                {% endif %}
+
+                <span class="product-badge">
+                    AI PICK
+                </span>
+
+            </a>
+
+
+            <div class="product-info">
+
+                <span class="product-category">
+                    {% if item.product.category %}
+                        {{ item.product.category.name }}
+                    {% endif %}
+                </span>
+
+                <h3>
+                    <a href="{% url 'product_detail' item.product.id %}">
+                        {{ item.product.name }}
+                    </a>
+                </h3>
+
+                <div class="product-bottom">
+
+                    <strong>
+                        ${{ item.product.price }}
+                    </strong>
+
+                    {% if user.is_authenticated and item.product.stock > 0 %}
+
+                    <a
+                        href="{% url 'add_to_cart' item.product.id %}"
+                        class="add-button"
+                    >
+                        +
+                    </a>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </article>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+{% endif %}
+
+
+<section class="discount-banner">
+
+    <div class="discount-content">
+
+        <span>
+            SPECIAL OFFER
+        </span>
+
+        <h2>
+            Get 25% Discount
+        </h2>
+
+        <p>
+            Discover our latest products and enjoy
+            exclusive offers.
+        </p>
+
+        <a href="{% url 'product_list' %}">
+            SHOP NOW →
+        </a>
+
+    </div>
+
+</section>
+
+
+<section class="ai-section">
+
+    <div class="ai-content">
+
+        <span class="section-label">
+            POWERED BY ARTIFICIAL INTELLIGENCE
+        </span>
+
+        <h2>
+            Shopping made
+            <span>smarter for you.</span>
+        </h2>
+
+        <p>
+            Our recommendation system learns from your shopping
+            activity and helps you discover products you'll love.
+        </p>
+
+        <a href="{% url 'product_list' %}" class="dark-button">
+            EXPLORE PRODUCTS
+        </a>
+
+    </div>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block title %}Shopping Cart | AI E-Commerce{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <h1 class="page-title">
+        Shopping Cart
+    </h1>
+
+    {% if items %}
+
+    <table class="cart-table">
+
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for item in items %}
+
+            <tr>
+
+                <td>
+                    {{ item.product.name }}
+                </td>
+
+                <td>
+                    ${{ item.product.price }}
+                </td>
+
+                <td>
+
+                    <form
+                        method="post"
+                        action="{% url 'update_cart' item.id %}"
+                    >
+
+                        {% csrf_token %}
+
+                        <input
+                            type="number"
+                            name="quantity"
+                            value="{{ item.quantity }}"
+                            min="1"
+                            max="{{ item.product.stock }}"
+                        >
+
+                        <button
+                            type="submit"
+                            class="secondary-button"
+                        >
+                            Update
+                        </button>
+
+                    </form>
+
+                </td>
+
+                <td>
+                    ${{ item.total_price }}
+                </td>
+
+                <td>
+
+                    <a
+                        href="{% url 'remove_from_cart' item.id %}"
+                        class="logout-button"
+                        data-confirm-delete
+                    >
+                        Remove
+                    </a>
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+
+    <div class="total-box">
+
+        <h2>
+            Total: ${{ cart.total_price }}
+        </h2>
+
+        <br>
+
+        <a
+            href="{% url 'checkout' %}"
+            class="primary-button"
+        >
+            Checkout
+        </a>
+
+    </div>
+
+    {% else %}
+
+    <div class="message">
+        Your cart is empty.
+    </div>
+
+    <a
+        href="{% url 'product_list' %}"
+        class="primary-button"
+    >
+        Continue Shopping
+    </a>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

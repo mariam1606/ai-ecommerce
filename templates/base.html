@@ -1,0 +1,189 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}AI Shop{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+
+<header class="site-header">
+
+    <div class="header-container">
+
+        <a href="{% url 'home' %}" class="logo">
+            AI<span>SHOP</span>
+        </a>
+
+        <form method="get" action="{% url 'product_list' %}" class="header-search">
+
+            <select name="category">
+                <option value="">All Categories</option>
+
+                {% if categories %}
+                    {% for category in categories %}
+                        <option value="{{ category.id }}">
+                            {{ category.name }}
+                        </option>
+                    {% endfor %}
+                {% endif %}
+            </select>
+
+            <input
+                type="text"
+                name="q"
+                placeholder="Find your choice of products"
+            >
+
+            <button type="submit">
+                Search
+            </button>
+
+        </form>
+
+        <nav class="main-nav">
+
+            <a href="{% url 'home' %}">HOME</a>
+
+            <a href="{% url 'product_list' %}">SHOP</a>
+
+            {% if user.is_authenticated %}
+                <a href="{% url 'order_history' %}">ORDERS</a>
+            {% endif %}
+
+        </nav>
+
+        <div class="header-actions">
+
+            {% if user.is_authenticated %}
+
+                <a href="{% url 'cart_detail' %}" class="icon-link">
+                    🛒
+                </a>
+
+                <a href="{% url 'profile' %}" class="icon-link">
+                    👤
+                </a>
+
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-link">
+                        Logout
+                    </button>
+                </form>
+
+            {% else %}
+
+                <a href="{% url 'login' %}" class="login-link">
+                    Login
+                </a>
+
+                <a href="{% url 'register' %}" class="register-link">
+                    Register
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</header>
+
+
+{% if messages %}
+
+<div class="messages-wrapper">
+
+    {% for message in messages %}
+
+        <div class="message {{ message.tags }}">
+            {{ message }}
+        </div>
+
+    {% endfor %}
+
+</div>
+
+{% endif %}
+
+
+<main>
+    {% block content %}
+    {% endblock %}
+</main>
+
+
+<footer class="site-footer">
+
+    <div class="footer-container">
+
+        <div class="footer-brand">
+            <div class="logo footer-logo">
+                AI<span>SHOP</span>
+            </div>
+
+            <p>
+                Smart shopping powered by AI.
+                Discover products that match your style.
+            </p>
+
+            <div class="social-icons">
+                <span>f</span>
+                <span>𝕏</span>
+                <span>◎</span>
+                <span>in</span>
+            </div>
+        </div>
+
+        <div class="footer-column">
+            <h4>AI SHOP</h4>
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'product_list' %}">Products</a>
+            <a href="#">About Us</a>
+            <a href="#">Contact</a>
+        </div>
+
+        <div class="footer-column">
+            <h4>QUICK LINKS</h4>
+            <a href="{% url 'product_list' %}">Shop</a>
+
+            {% if user.is_authenticated %}
+                <a href="{% url 'cart_detail' %}">Shopping Cart</a>
+                <a href="{% url 'order_history' %}">My Orders</a>
+            {% else %}
+                <a href="{% url 'login' %}">Login</a>
+                <a href="{% url 'register' %}">Register</a>
+            {% endif %}
+        </div>
+
+        <div class="footer-column">
+            <h4>CUSTOMER SERVICE</h4>
+            <a href="#">Shipping</a>
+            <a href="#">Returns</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms & Conditions</a>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        © 2026 AI Shop. All rights reserved.
+    </div>
+
+</footer>
+
+
+<script src="{% static 'js/main.js' %}"></script>
+
+{% block extra_js %}
+{% endblock %}
+
+</body>
+</html>

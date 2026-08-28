@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}My Orders | AI E-Commerce{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <h1 class="page-title">
+        My Orders
+    </h1>
+
+    {% if orders %}
+
+    <div class="product-grid">
+
+        {% for order in orders %}
+
+        <div class="product-card">
+
+            <div class="product-content">
+
+                <h3>
+                    Order #{{ order.id }}
+                </h3>
+
+                <p>
+                    Date:
+                    {{ order.created_at }}
+                </p>
+
+                <p class="product-price">
+                    ${{ order.total_price }}
+                </p>
+
+                <p>
+                    Status:
+                    <strong>{{ order.status }}</strong>
+                </p>
+
+                <br>
+
+                <a
+                    href="{% url 'order_detail' order.id %}"
+                    class="secondary-button"
+                >
+                    View Order
+                </a>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% else %}
+
+    <div class="message">
+        You have no orders yet.
+    </div>
+
+    <a
+        href="{% url 'product_list' %}"
+        class="primary-button"
+    >
+        Start Shopping
+    </a>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
