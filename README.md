@@ -54,7 +54,7 @@ Then open the website in your browser.
 ---------------------------------------------------
 Database:
 
-PostgreSQL is used to store users, products, categories, carts, orders, and product interactions.
+postgreSQL is used to store users, products, categories, carts, orders, and product interactions.
 ---------------------------------------------------
 Project:
 
